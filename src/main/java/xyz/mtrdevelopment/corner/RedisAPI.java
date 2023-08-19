@@ -72,6 +72,7 @@ public class RedisAPI {
     public boolean isConnected() {
         return jedis.isConnected();
     }
+
     public void shutdown() {
         jedisPool.destroy();
         redisListener.unsubscribe();
