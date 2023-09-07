@@ -20,7 +20,7 @@ public final class Plugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         instance = this;
-        this.jedisAPI = new RedisAPI(new RedisCredentials("127.0.0.1", "RedisAPI", 6379));
+        this.jedisAPI = new RedisAPI(this, new RedisCredentials("127.0.0.1", "RedisAPI", 6379));
         this.jedisAPI.send(new ConsoleLogPacket("&aYOOOO it works"));
         this.getServer().getPluginManager().registerEvents(this, this);
     }

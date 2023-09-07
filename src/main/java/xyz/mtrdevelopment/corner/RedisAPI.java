@@ -11,6 +11,8 @@ package xyz.mtrdevelopment.corner;
 
 import com.google.gson.Gson;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -23,6 +25,7 @@ import java.util.concurrent.Executors;
 
 @Getter
 public class RedisAPI {
+    private final Plugin plugin;
     private final RedisCredentials redisCredentials;
     private final Gson gson;
     private final Executor executor;
@@ -31,7 +34,8 @@ public class RedisAPI {
     private JedisPool jedisPool;
     private Jedis jedis;
 
-    public RedisAPI(RedisCredentials redisCredentials) {
+    public RedisAPI(Plugin plugin, RedisCredentials redisCredentials) {
+        this.plugin = plugin;
         this.redisCredentials = redisCredentials;
         this.gson = new Gson();
         this.executor = Executors.newFixedThreadPool(2);
@@ -53,7 +57,11 @@ public class RedisAPI {
     }
 
     public void send(RedisPacket redisPacket) {
-        redisPacket.onSend();
+        if(redisPacket.async()) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, redisPacket::onSend);
+        } else {
+            redisPacket.onSend();
+        }
         new Thread(() -> {
             try (Jedis jedis = jedisPool.getResource()) {
                 this.jedis = jedis;

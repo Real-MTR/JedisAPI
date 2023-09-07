@@ -27,4 +27,9 @@ public class ConsoleLogPacket implements RedisPacket {
     public void onReceived() {
         ChatUtils.sendMessage(Bukkit.getConsoleSender(), message);
     }
+
+    @Override
+    public boolean async() {
+        return true;
+    }
 }

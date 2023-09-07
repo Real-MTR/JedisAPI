@@ -12,4 +12,5 @@ package xyz.mtrdevelopment.corner.packets;
 public interface RedisPacket {
     void onReceived();
     default void onSend() {}
+    default boolean async() {return false;}
 }

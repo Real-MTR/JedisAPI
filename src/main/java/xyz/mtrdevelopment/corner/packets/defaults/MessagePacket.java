@@ -32,4 +32,9 @@ public class MessagePacket implements RedisPacket {
             }
         });
     }
+
+    @Override
+    public boolean async() {
+        return true;
+    }
 }
